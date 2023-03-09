@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', () => {
     headerImg: '',
     authority: {},
     sideMode: 'dark',
-    activeColor: '#4D70FF',
+    activeColor: 'var(--el-color-primary)',
     baseColor: '#fff'
   })
   const token = ref(window.localStorage.getItem('token') || '')
@@ -52,7 +52,7 @@ export const useUserStore = defineStore('user', () => {
   const LoginIn = async(loginInfo) => {
     loadingInstance.value = ElLoading.service({
       fullscreen: true,
-      text: '登陆中，请稍候...',
+      text: '登录中，请稍候...',
     })
     try {
       const res = await login(loginInfo)
@@ -65,7 +65,8 @@ export const useUserStore = defineStore('user', () => {
         asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
         })
-        router.push({ name: userInfo.value.authority.defaultRouter })
+        await router.replace({ name: userInfo.value.authority.defaultRouter })
+        loadingInstance.value.close()
         return true
       }
     } catch (e) {
@@ -83,6 +84,12 @@ export const useUserStore = defineStore('user', () => {
       router.push({ name: 'Login', replace: true })
       window.location.reload()
     }
+  }
+  /* 清理数据 */
+  const ClearStorage = async() => {
+    token.value = ''
+    sessionStorage.clear()
+    localStorage.clear()
   }
   /* 设置侧边栏模式*/
   const changeSideMode = async(data) => {
@@ -116,13 +123,10 @@ export const useUserStore = defineStore('user', () => {
     }
   })
   const activeColor = computed(() => {
-    if (userInfo.value.sideMode === 'dark' || userInfo.value.sideMode === 'light') {
-      return '#4D70FF'
-    }
-    return userInfo.activeColor
+    return 'var(--el-color-primary)'
   })
 
-  watch(token, () => {
+  watch(() => token.value, () => {
     window.localStorage.setItem('token', token.value)
   })
 
@@ -140,6 +144,7 @@ export const useUserStore = defineStore('user', () => {
     setToken,
     baseColor,
     activeColor,
-    loadingInstance
+    loadingInstance,
+    ClearStorage
   }
 })

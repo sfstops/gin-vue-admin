@@ -1,15 +1,15 @@
 <template>
   <div>
     <el-upload
-        :action="`${path}/fileUploadAndDownload/upload`"
-        :before-upload="checkFile"
-        :headers="{ 'x-token': userStore.token }"
-        :on-error="uploadError"
-        :on-success="uploadSuccess"
-        :show-file-list="false"
-        class="upload-btn"
+      :action="`${path}/fileUploadAndDownload/upload`"
+      :before-upload="checkFile"
+      :headers="{ 'x-token': userStore.token }"
+      :on-error="uploadError"
+      :on-success="uploadSuccess"
+      :show-file-list="false"
+      class="upload-btn"
     >
-      <el-button size="small" type="primary">普通上传</el-button>
+      <el-button type="primary">普通上传</el-button>
     </el-upload>
   </div>
 </template>
@@ -36,7 +36,7 @@ const checkFile = (file) => {
     fullscreenLoading.value = false
   }
   if (!isLt2M) {
-    ElMessage.error('未压缩未见上传图片大小不能超过 500KB，请使用压缩上传')
+    ElMessage.error('未压缩的上传图片大小不能超过 500KB，请使用压缩上传')
     fullscreenLoading.value = false
   }
   return (isPng || isJPG) && isLt2M

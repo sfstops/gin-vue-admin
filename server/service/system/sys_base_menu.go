@@ -59,6 +59,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 	upDateMap["hidden"] = menu.Hidden
 	upDateMap["component"] = menu.Component
 	upDateMap["title"] = menu.Title
+	upDateMap["active_name"] = menu.ActiveName
 	upDateMap["icon"] = menu.Icon
 	upDateMap["sort"] = menu.Sort
 
@@ -116,9 +117,9 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 //@function: GetBaseMenuById
 //@description: 返回当前选中menu
 //@param: id float64
-//@return: err error, menu model.SysBaseMenu
+//@return: menu system.SysBaseMenu, err error
 
-func (baseMenuService *BaseMenuService) GetBaseMenuById(id int) (err error, menu system.SysBaseMenu) {
+func (baseMenuService *BaseMenuService) GetBaseMenuById(id int) (menu system.SysBaseMenu, err error) {
 	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("id = ?", id).First(&menu).Error
 	return
 }
